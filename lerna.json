@@ -1,0 +1,11 @@
+{
+  "version": "independent",
+  "npmClient": "bun",
+  "useWorkspaces": true,
+  "packages": ["exo/packages/*"],
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": ["--no-package-lock"]
+    }
+  }
+}

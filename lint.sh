@@ -1,5 +1,6 @@
 #!/bin/bash
 
-pip3 install -e '.[linting]'
-python3 -m ruff check .
-python3 -m pylint .
+# Run ESLint for all packages
+bun run lint
+
+# ... any other linting steps ...

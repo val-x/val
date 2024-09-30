@@ -1,0 +1,29 @@
+{
+  "name": "valen-monorepo",
+  "private": true,
+  "workspaces": [
+    "exo/packages/*"
+  ],
+  "scripts": {
+    "start": "bun run --cwd exo/packages/app start",
+    "android": "bun run --cwd exo/packages/app android",
+    "ios": "bun run --cwd exo/packages/app ios",
+    "web": "bun run --cwd exo/packages/app web",
+    "windows": "bun run --cwd exo/packages/app windows",
+    "macos": "bun run --cwd exo/packages/app macos",
+    "sync-upstream": "git fetch upstream && git checkout develop && git merge upstream/main && git push origin develop",
+    "fs": "git flow feature start",
+    "ff": "git flow feature finish",
+    "rs": "git flow release start",
+    "rf": "git flow release finish",
+    "hfs": "git flow hotfix start",
+    "hff": "git flow hotfix finish",
+    "lint": "eslint .",
+    "bootstrap": "lerna bootstrap --npm-client=bun -- --no-package-lock",
+    "clean": "rm -rf node_modules exo/packages/*/node_modules exo/packages/*/build"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "lerna": "^8.1.8"
+  }
+}
