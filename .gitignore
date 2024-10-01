@@ -1,4 +1,10 @@
+# Ignore node_modules directories
+node_modules/
+
+# Ignore pycache directories
 __pycache__/
+
+# Ignore virtual environments
 .venv
 test_weights.npz
 .exo_used_ports
@@ -170,3 +176,7 @@ cython_debug/
 #.idea/
 
 **/*.xcodeproj/*
+dist/
+build/
+*.log
+.DS_Store

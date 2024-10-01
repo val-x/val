@@ -1,11 +1,10 @@
 {
-  "version": "independent",
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "version": "0.0.0",
   "npmClient": "bun",
   "useWorkspaces": true,
-  "packages": ["exo/packages/*"],
-  "command": {
-    "bootstrap": {
-      "npmClientArgs": ["--no-package-lock"]
-    }
-  }
+  "packages": [
+    "exo/packages/*",
+    "exo/packages/app/Valen"
+  ]
 }

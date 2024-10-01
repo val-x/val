@@ -2,7 +2,8 @@
   "name": "valen-monorepo",
   "private": true,
   "workspaces": [
-    "exo/packages/*"
+    "exo/packages/*",
+    "exo/packages/app/Valen"
   ],
   "scripts": {
     "start": "bun run --cwd exo/packages/app start",
@@ -25,5 +26,8 @@
   "devDependencies": {
     "eslint": "^8.0.0",
     "lerna": "^8.1.8"
+  },
+  "dependencies": {
+    "valen-monorepo": "file:"
   }
 }
