@@ -30,15 +30,7 @@ find . -name ".turbo" -type d -prune -exec rm -rf '{}' +
 echo "📦 Installing dependencies..."
 bun install
 
-# Build all packages
-echo "🏗️ Building packages..."
-bun run build
 
 echo """
 ✅ Setup complete! 
-
-To start development:
-1. Start both backend and frontend: bun dev
-
-The frontend will be available at http://localhost:3000
 """
