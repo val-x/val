@@ -69,3 +69,7 @@ dist-ssr
 server/dist
 public/dist
 storybook-static/
+
+# Next.js
+.next/
+out/

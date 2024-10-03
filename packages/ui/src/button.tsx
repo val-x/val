@@ -1,14 +1,14 @@
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+import React from 'react';
+
+export interface ButtonProps {
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
-export function Button({ children, ...other }: ButtonProps): JSX.Element {
+export const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
   return (
-    <button type="button" {...other}>
+    <button onClick={onClick} style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px' }}>
       {children}
     </button>
   );
-}
-
-Button.displayName = "Button";
+};

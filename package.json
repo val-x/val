@@ -18,7 +18,9 @@
   "name": "design-system",
   "packageManager": "bun@1.1.17",
   "workspaces": [
-    "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@repo/typescript-config": "*"
+  }
 }
