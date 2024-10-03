@@ -55,3 +55,17 @@ wheels/
 .vscode
 *.swp
 *.swo
+# system files
+.DS_Store
+node_modules
+.turbo
+*.log
+.next
+dist
+dist-ssr
+*.local
+.env
+.cache
+server/dist
+public/dist
+storybook-static/
