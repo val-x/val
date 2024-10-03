@@ -16,16 +16,8 @@ check_command() {
 
 # Check for required commands
 echo "🔍 Checking required tools..."
-check_command "node" || { echo "Node.js is required but not installed."; exit 1; }
+check_command "bun" || { echo "Bun is required but not installed. Please install from https://bun.sh/"; exit 1; }
 check_command "python3" || { echo "Python 3 is required but not installed."; exit 1; }
-
-# Install Bun if not already installed
-if ! check_command "bun"; then
-    echo "📦 Installing Bun..."
-    curl -fsSL https://bun.sh/install | bash
-    # Reloading shell configuration
-    source ~/.bashrc 2>/dev/null || source ~/.zshrc 2>/dev/null || true
-fi
 
 # Clean up existing build artifacts
 echo "🧹 Cleaning up old build artifacts..."
@@ -34,7 +26,7 @@ find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 find . -name ".next" -type d -prune -exec rm -rf '{}' +
 find . -name ".turbo" -type d -prune -exec rm -rf '{}' +
 
-# Setup Node.js environment
+# Setup Bun environment
 echo "📦 Installing dependencies..."
 bun install
 
