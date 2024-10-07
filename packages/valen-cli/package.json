@@ -1,0 +1,16 @@
+{
+  "name": "valen-cli",
+  "version": "1.0.0",
+  "description": "CLI tool for Valen",
+  "main": "index.js",
+  "bin": {
+    "valen": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "socket.io-client": "^4.8.0"
+  }
+}
