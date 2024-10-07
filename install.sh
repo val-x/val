@@ -30,6 +30,11 @@ find . -name ".turbo" -type d -prune -exec rm -rf '{}' +
 echo "📦 Installing dependencies..."
 bun install
 
+# Setup Python environment
+echo "📦 Installing Python dependencies..."
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
 
 echo """
 ✅ Setup complete! 
