@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun ts-node-dev --respawn --transpile-only server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "postinstall": "node scripts/install-docker.js && echo 'If Docker installation was successful, you may need to start the Docker daemon manually.'"
+  },
+  "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.5.4"
+  }
+}

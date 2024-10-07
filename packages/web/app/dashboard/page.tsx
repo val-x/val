@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { CardSpotlight } from "@/components/ui/card-spotlight"
 import Link from 'next/link'
-import { IconSend, IconPlus, IconX, IconEdit, IconCode, IconEye, IconPencil } from "@tabler/icons-react"
+import { IconSend, IconPlus, IconX, IconEdit, IconCode, IconEye, IconPencil, IconMicrophone } from "@tabler/icons-react"
 import { Select } from "@/components/ui/select"
 import dynamic from 'next/dynamic'
 import ShiftCard from '@/components/ShiftCard'
@@ -20,6 +20,8 @@ import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
 import { Vortex } from "@/components/ui/vortex";
+import { useRouter } from 'next/navigation'
+import styles from './Dashboard.module.css' // We'll create this CSS module file
 
 const NovelEditor = dynamic(() => import('@/components/NovelEditor'), { ssr: false })
 
@@ -49,6 +51,7 @@ type ModelResources = {
 };
 
 export default function Dashboard() {
+  const router = useRouter()
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'How does NotebookLM use Gemini to help users do their best thinking?' }
   ])
@@ -70,6 +73,7 @@ export default function Dashboard() {
   });
   const [editingCards, setEditingCards] = useState<{[key: string]: boolean}>({});
   const [isAILoading, setIsAILoading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleSend = useCallback(() => {
     if (input.trim()) {
@@ -246,6 +250,10 @@ export default function Dashboard() {
       ))}
     </div>
   );
+
+  const navigateToVoiceAssistant = () => {
+    router.push('/voice-assistant')
+  }
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
@@ -424,6 +432,19 @@ export default function Dashboard() {
             NotebookLM may still sometimes give inaccurate responses, so you may want to confirm any facts independently.
           </div>
         )}
+        <div className={`${styles.siriButtonContainer} absolute bottom-4 left-4`}>
+          <div
+            className={`${styles.siriButton} ${isHovered ? styles.hovered : ''}`}
+            onClick={navigateToVoiceAssistant}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <IconMicrophone className={styles.micIcon} size={24} />
+          </div>
+          <span className={`${styles.buttonLabel} ${isHovered ? styles.labelVisible : ''}`}>
+            Voice Assistant
+          </span>
+        </div>
       </AuroraBackground>
     </div>
   )
