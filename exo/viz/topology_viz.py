@@ -15,7 +15,19 @@ from rich.layout import Layout
 from rich.syntax import Syntax
 from rich.panel import Panel
 from rich.markdown import Markdown
+import json
+import os
+from flask import Flask, jsonify
+from flask_cors import CORS
+import socket
 
+# Add this function at the beginning of the file, after the imports
+def cbrt(x):
+    """Calculate the cube root of x."""
+    if x >= 0:
+        return x ** (1/3)
+    else:
+        return -(-x) ** (1/3)
 
 class TopologyViz:
   def __init__(self, chatgpt_api_endpoints: List[str] = [], web_chat_urls: List[str] = []):
@@ -161,7 +173,7 @@ class TopologyViz:
 
     # Calculate total FLOPS and position on the bar
     total_flops = sum(self.topology.nodes.get(partition.node_id, UNKNOWN_DEVICE_CAPABILITIES).flops.fp16 for partition in self.partitions)
-    bar_pos = (math.tanh(math.cbrt(total_flops)/2.5 - 2) + 1)
+    bar_pos = (math.tanh(cbrt(total_flops)/2.5 - 2) + 1)
 
     # Add GPU poor/rich bar
     bar_width = 30
@@ -170,7 +182,7 @@ class TopologyViz:
 
     # Create a gradient bar using emojis
     gradient_bar = Text()
-    emojis = ["🟥", "🟧", "🟨", "🟩"]
+    emojis = ["🟥", "🟧", "", "🟩"]
     for i in range(bar_width):
       emoji_index = min(int(i/(bar_width/len(emojis))), len(emojis) - 1)
       gradient_bar.append(emojis[emoji_index])
@@ -305,3 +317,83 @@ class TopologyViz:
         summary.add_row("", progress_bar, eta_str)
 
     return summary
+
+  def get_topology_data(self):
+    return json.dumps({
+        "nodes": [
+            {
+                "id": node_id,
+                "model": node.model,
+                "memory": node.memory,
+                "flops": node.flops.fp16,
+                "isActive": node_id == self.topology.active_node_id,
+                "isCurrentNode": node_id == self.node_id
+            }
+            for node_id, node in self.topology.nodes.items()
+        ],
+        "partitions": [
+            {
+                "nodeId": partition.node_id,
+                "start": partition.start,
+                "end": partition.end
+            }
+            for partition in self.partitions
+        ],
+        "totalFlops": sum(node.flops.fp16 for node in self.topology.nodes.values()),
+        "chatgptApiEndpoints": self.chatgpt_api_endpoints,
+        "webChatUrls": self.web_chat_urls
+    })
+
+  def write_topology_data_to_file(self):
+    data = self.get_topology_data()
+    file_path = os.path.join(os.path.dirname(__file__), '..', '..', 'packages', 'web', 'public', 'topology_data.json')
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, 'w') as f:
+      json.dump(json.loads(data), f)
+    print(f"Topology data written to {file_path}")
+    
+    # Add this line to print the absolute path
+    print(f"Absolute path: {os.path.abspath(file_path)}")
+
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+topology_viz = TopologyViz()
+
+@app.route('/api/topology', methods=['GET'])
+def get_topology_data():
+    try:
+        data = json.loads(topology_viz.get_topology_data())
+        return jsonify(data)
+    except Exception as e:
+        print(f"Error getting topology data: {str(e)}")
+        return jsonify({"error": "Topology data not available"}), 503
+
+def find_available_port(start_port=5000, max_port=5100):
+    for port in range(start_port, max_port):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind(('', port))
+                return port
+            except OSError:
+                continue
+    raise OSError(f"No available ports in range {start_port}-{max_port}")
+
+def run_api(host='0.0.0.0', port=None):
+    if port is None:
+        port = find_available_port()
+    print(f"Starting topology API on port {port}")
+    app.run(host=host, port=port)
+
+if __name__ == "__main__":
+    try:
+        run_api()
+    except OSError as e:
+        print(f"Error starting the server: {e}")
+        print("Please make sure no other instance of the topology API is running.")
+        import sys
+        sys.exit(1)
+else:
+    # This allows the Flask app to be imported without immediately starting the server
+    # Useful for testing or when you want to start the server programmatically
+    pass

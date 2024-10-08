@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import CodeBlock from './components/CodeBlock';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from "@/components/ui/button"
 import { CardSpotlight } from "@/components/ui/card-spotlight"
 import { FloatingDock } from "@/components/ui/floating-dock"
@@ -13,8 +13,10 @@ import { WavyBackground } from "@/components/ui/wavy-background";
 import { TeamSection } from "@/components/ui/team-section";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { Sidebar, SidebarContent, SidebarTrigger } from "@/components/ui/sidebar";
-import { IconHome, IconCode, IconServer } from "@tabler/icons-react";
+import { IconHome, IconCode, IconServer, IconSend, IconPlus, IconX, IconEdit, IconNetwork } from "@tabler/icons-react";
 import Link from 'next/link';
+import { Select } from "@/components/ui/select"
+import { useRouter } from 'next/navigation'
 
 const PALM_TREE_IMAGE = 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80';
 
@@ -89,9 +91,12 @@ const people = [
 ];
 
 export default function Home() {
+  const router = useRouter()
   const [backgroundImage, setBackgroundImage] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState("Windows");
   const platforms = ["Windows", "MacOS", "Linux", "Docker"];
+  const [input, setInput] = useState('')
+  const [showSourceGuide, setShowSourceGuide] = useState(false)
 
   useEffect(() => {
     setBackgroundImage(PALM_TREE_IMAGE);
@@ -102,6 +107,18 @@ export default function Home() {
     const nextIndex = (currentIndex + 1) % platforms.length;
     setSelectedPlatform(platforms[nextIndex]);
   };
+
+  const handleSend = () => {
+    // Implementation for handleSend function
+  }
+
+  const handleArtifactRun = (type: string) => {
+    // Implementation for handleArtifactRun function
+  }
+
+  const navigateToTopologyMonitor = () => {
+    router.push('/topology-monitor')
+  }
 
   const timelineData = [
     {
@@ -245,6 +262,14 @@ export default function Home() {
                   <FloatingDock items={sdkItems} className="w-full" label="SDKs" />
                   <FloatingDock items={resourceItems} className="w-full" label="Resources" />
                 </div>
+              </div>
+              
+              {/* Add the Topology Monitor button here */}
+              <div className="mt-6">
+                <Button onClick={navigateToTopologyMonitor} className="mr-2">
+                  <IconNetwork className="h-5 w-5 mr-2" />
+                  Topology Monitor
+                </Button>
               </div>
             </div>
           </CardSpotlight>

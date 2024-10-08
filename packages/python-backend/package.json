@@ -1,0 +1,9 @@
+{
+  "name": "python-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd ../.. && python -m exo.main",
+    "start": "cd ../.. && python -m exo.main"
+  }
+}

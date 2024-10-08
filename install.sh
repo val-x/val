@@ -1,41 +1,72 @@
 #!/bin/bash
 
-set -e  # Exit on error
-
-echo "🚀 Starting project setup..."
-
-# Function to check command existence
-check_command() {
-    if ! command -v $1 &> /dev/null; then
-        echo "❌ $1 is not installed"
-        return 1
+# Function to detect the operating system
+detect_os() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "macos"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        echo "linux"
+    else
+        echo "unknown"
     fi
-    echo "✅ $1 is installed"
-    return 0
 }
 
-# Check for required commands
-echo "🔍 Checking required tools..."
-check_command "bun" || { echo "Bun is required but not installed. Please install from https://bun.sh/"; exit 1; }
-check_command "python3" || { echo "Python 3 is required but not installed."; exit 1; }
+# Function to install packages on Linux
+install_linux() {
+    if command -v apt-get &> /dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y $1
+    elif command -v yum &> /dev/null; then
+        sudo yum install -y $1
+    elif command -v dnf &> /dev/null; then
+        sudo dnf install -y $1
+    else
+        echo "Unsupported package manager. Please install $1 manually."
+        exit 1
+    fi
+}
 
-# Clean up existing build artifacts
-echo "🧹 Cleaning up old build artifacts..."
-rm -rf node_modules bun.lockb
-find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
-find . -name ".next" -type d -prune -exec rm -rf '{}' +
-find . -name ".turbo" -type d -prune -exec rm -rf '{}' +
+OS=$(detect_os)
 
-# Setup Bun environment
-echo "📦 Installing dependencies..."
-bun install
+if [ "$OS" == "macos" ]; then
+    # Check for Homebrew and install if not found
+    if ! command -v brew &> /dev/null; then
+        echo "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
 
-# Setup Python environment
-echo "📦 Installing Python dependencies..."
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e .
+    # Check for Node.js and install if not found
+    if ! command -v node &> /dev/null; then
+        echo "Installing Node.js..."
+        brew install node
+    fi
 
-echo """
-✅ Setup complete! 
-"""
+    # Check for Python and install if not found
+    if ! command -v python3 &> /dev/null; then
+        echo "Installing Python..."
+        brew install python
+    fi
+elif [ "$OS" == "linux" ]; then
+    # Check for Node.js and install if not found
+    if ! command -v node &> /dev/null; then
+        echo "Installing Node.js..."
+        install_linux nodejs
+    fi
+
+    # Check for Python and install if not found
+    if ! command -v python3 &> /dev/null; then
+        echo "Installing Python..."
+        install_linux python3
+    fi
+else
+    echo "Unsupported operating system"
+    exit 1
+fi
+
+# Check for Bun and install if not found (works for both macOS and Linux)
+if ! command -v bun &> /dev/null; then
+    echo "Installing Bun..."
+    curl -fsSL https://bun.sh/install | bash
+fi
+
+echo "Prerequisites installation complete. You can now run 'bun run install' or 'npm run install'."

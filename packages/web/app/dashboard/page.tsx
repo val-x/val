@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { CardSpotlight } from "@/components/ui/card-spotlight"
 import Link from 'next/link'
-import { IconSend, IconPlus, IconX, IconEdit, IconCode, IconEye, IconPencil, IconMicrophone } from "@tabler/icons-react"
+import { IconSend, IconPlus, IconX, IconEdit, IconCode, IconEye, IconPencil, IconMicrophone, IconNetwork } from "@tabler/icons-react"
 import { Select } from "@/components/ui/select"
 import dynamic from 'next/dynamic'
 import ShiftCard from '@/components/ShiftCard'

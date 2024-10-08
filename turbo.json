@@ -16,6 +16,13 @@
     },
     "postinstall": {
       "cache": false
+    },
+    "dev:with-topology": {
+      "cache": false,
+      "persistent": true
+    },
+    "update-topology": {
+      "cache": false
     }
   }
 }

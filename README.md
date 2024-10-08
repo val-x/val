@@ -2,25 +2,42 @@
 
 ## Setup
 
-1. Ensure you have sufficient disk space before proceeding.
+### Python Backend
 
-2. Clone the repository:
+1. Create a virtual environment:
    ```
-   git clone <repository-url>
-   cd valen-monorepo
-   ```
-
-3. If you encounter space issues, run the clean script:
-   ```
-   bun run clean
+   python -m venv venv
    ```
 
-4. Run the install script:
+2. Activate the virtual environment:
+   - On Unix or MacOS:
+     ```
+     source venv/bin/activate
+     ```
+   - On Windows:
+     ```
+     venv\Scripts\activate
+     ```
+
+3. Install the project in editable mode:
    ```
-   ./install.sh
+   pip install -e .
+   ```
+
+4. Run the Python backend:
+   ```
+   npm run start:python
    ```
 
 This will clean up unnecessary files, install all dependencies, and bootstrap the project.
+
+## Prerequisites
+
+The `install.sh` (for macOS/Linux) or `install.cmd` (for Windows) script will install these prerequisites if they're not already present:
+
+- [Node.js](https://nodejs.org/) (version 14 or later)
+- [Bun](https://bun.sh/) (latest version)
+- [Python](https://www.python.org/) (version 3.7 or later)
 
 ## Available Scripts
 

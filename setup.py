@@ -25,6 +25,9 @@ install_requires = [
   "transformers==4.43.3",
   "uuid==1.30",
   "tinygrad @ git+https://github.com/tinygrad/tinygrad.git@232edcfd4f8b388807c64fb1817a7668ce27cbad",
+  "flask==2.0.1",
+  "flask-cors==3.0.10",
+  "werkzeug==2.0.1",  # Add this line
 ]
 
 # Add macOS-specific packages if on Darwin (macOS)
